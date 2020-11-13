@@ -228,6 +228,7 @@ def makefull_function(fx, ch):
     make_temp(fx)
     make_x_list()
     func = fix_function(fx)
+    print("Plotting: " + func)
     calc_function(func)
     if(unit_list[current_graph] == 'y'):
         linear()

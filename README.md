@@ -47,8 +47,8 @@ Needed to run:
 ## Usage
 
 Examples of valid input are:
-* []
-
+<img src="images/example_graph1.png" alt="ex1">
+<img src="images/example_graph2.png" alt="ex2">
 
 
 <!-- ROADMAP -->

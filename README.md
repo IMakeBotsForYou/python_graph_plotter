@@ -47,8 +47,8 @@ Needed to run:
 ## Usage
 
 Examples of valid input are:
-<img src="images/example_graph1.png" alt="ex1" width="1200" height="1300" >
-<img src="images/example_graph2.png" alt="ex2" width="1100" height="1300">
+<img src="https://github.com/IMakeBotsForYou/python_graph_plotter/blob/main/images/graph_example1.png?raw=true" alt="ex1" width="1200" height="1300" >
+<img src="https://github.com/IMakeBotsForYou/python_graph_plotter/blob/main/images/graph_example2.png?raw=true" alt="ex2" width="1100" height="1300">
 
 
 <!-- ROADMAP -->

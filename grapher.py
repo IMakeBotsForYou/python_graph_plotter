@@ -13,6 +13,7 @@ ch_list = []
 current_graph = 0
 unit_list = []
 
+
 def get_fx():
     print("Editor's note: To do powers, you can do either x * x, xx, pow(x, 2), or x**2")
     print("Available functions: cos, sin, tan, sqrt, pow")
@@ -34,6 +35,7 @@ def get_fx():
         ch_list.append(input("Char for current graph: "))
         unit_list.append(input("Use scaling for this: y/n "))
 
+
 # Relative Unit
 rel_unit = 1
 ###
@@ -43,6 +45,7 @@ rel_unit = 1
 # All occurances of X in the function
 temp = ""
 func = ""
+
 
 def make_temp(fx):
     global temp
@@ -75,20 +78,34 @@ def standAloneX(i):
         return temp
 
 
+def insert(st, i, ch):
+    return st[:i] + ch + st[i:]
+
+
 def fix_function(fx):
     global xlist, temp, func
+    # I found a smarter way :D
+    for index in range(1, len(fx)):
+        if fx[index] == "(" and fx[index - 1] == ")":
+            fx = insert(fx, index, '*')
+            index += 1
+        elif (fx[index].isalpha() or fx[index] == "(") and fx[index - 1].isnumeric():
+            fx = insert(fx, index, '*')
+            index += 1
+    # 5cos(x) => 5 * cos(1 * x)
+    # if (len(xlist) > 0):
+    #     if xlist[0] == 0:
+    #         temp = "1{0}".format(temp)
+    #         xlist.pop(0)
+    # xlist = findOccurrences('x')
+    # while len(xlist) > 0:
+    #     # update list
+    #     i = xlist[-1]
+    #     temp = standAloneX(i)
+    #     del xlist[-1]
 
-    if (len(xlist) > 0):
-        if xlist[0] == 0:
-            temp = "1{0}".format(temp)
-            xlist.pop(0)
-    xlist = findOccurrences('x')
-    while len(xlist) > 0:
-        # update list
-        i = xlist[-1]
-        temp = standAloneX(i)
-        del xlist[-1]
-    return temp.replace("x", "*(x)")
+    return fx.replace("x", "(x)")
+
 
 # Initialize axis
 ###fix_function(func)
@@ -127,7 +144,7 @@ def linear():
         i += 1  # skip over dead area, if there is one.
         # Example of this is sqrt(x)
 
-    #Calculate slope
+    # Calculate slope
     m = (yvalues[i + 2] - yvalues[i + 1]) / (xvalues[i + 1] - xvalues[i])  # (y1-y)/(x1-x)
 
     for index in range(1, xSize, 1):
@@ -138,7 +155,7 @@ def linear():
 ###linear()
 # If not, calculate scale.
 def needUnit():
-    global need_unit ,xSize,yvalues,left_x ,right_x,ySize,current_graph,rel_unit
+    global need_unit, xSize, yvalues, left_x, right_x, ySize, current_graph, rel_unit
 
     if need_unit:
         (maxY, minY) = (max(yvalues[xSize + left_x[current_graph]:right_x[current_graph] + xSize]),
@@ -228,9 +245,9 @@ def makefull_function(fx, ch):
     make_temp(fx)
     make_x_list()
     func = fix_function(fx)
-    print("Plotting: " + fx)
+    print("Plotting: " + func)
     calc_function(func)
-    if(unit_list[current_graph] == 'y'):
+    if (unit_list[current_graph] == 'y'):
         linear()
         needUnit()
     fill_graph(ch)

@@ -42,7 +42,7 @@ rel_unit = 1
 
 # All occurances of X in the function
 temp = ""
-
+func = ""
 
 def make_temp(fx):
     global temp
@@ -76,8 +76,7 @@ def standAloneX(i):
 
 
 def fix_function(fx):
-    global xlist
-    global temp
+    global xlist, temp, func
 
     if (len(xlist) > 0):
         if xlist[0] == 0:
@@ -89,9 +88,7 @@ def fix_function(fx):
         i = xlist[-1]
         temp = standAloneX(i)
         del xlist[-1]
-    fx = temp.replace("x", "*(x)")
-    print(fx)
-
+    return temp.replace("x", "*(x)")
 
 # Initialize axis
 ###fix_function(func)
@@ -107,8 +104,7 @@ yvalues = []
 
 
 def calc_function(fx):
-    global yvalues
-    global xvalues
+    global yvalues, xvalues
     yvalues = []
     for x in xvalues:
         try:
@@ -123,11 +119,7 @@ need_unit = False
 
 # Check if slope is equal at all points
 def linear():
-    global xSize
-    global yvalues
-    global need_unit
-    global m
-    global yvalues
+    global xSize, yvalues, need_unit, m
 
     # First of all, do we even need a relative scale?
     i = 0
@@ -146,14 +138,7 @@ def linear():
 ###linear()
 # If not, calculate scale.
 def needUnit():
-    global need_unit
-    global xSize
-    global yvalues
-    global left_x
-    global right_x
-    global ySize
-    global rel_unit
-    global current_graph
+    global need_unit ,xSize,yvalues,left_x ,right_x,ySize,current_graph,rel_unit
 
     if need_unit:
         (maxY, minY) = (max(yvalues[xSize + left_x[current_graph]:right_x[current_graph] + xSize]),
@@ -162,6 +147,7 @@ def needUnit():
             rel_unit = maxY / ySize
         else:
             rel_unit = abs(minY) / ySize
+        fix_y_values()
     print("Scale: " + str(rel_unit) + ":1")
 
 
@@ -183,7 +169,7 @@ graph = ""  # Initiate empty string for graph
 def draw_axis():
     global graph
     for y in range(ySize, -ySize - 1, -1):
-        for x in range(-xSize, xSize + 1, 1):
+        for x in range(-xSize, xSize + 1):
             if x == 0:
                 graph += '|'  # Y axis
             elif y == 0:
@@ -241,12 +227,11 @@ def makefull_function(fx, ch):
     fix_function(fx)
     make_temp(fx)
     make_x_list()
-    fix_function(fx)
-    calc_function(fx)
+    func = fix_function(fx)
+    calc_function(func)
     if(unit_list[current_graph] == 'y'):
         linear()
         needUnit()
-        fix_y_values()
     fill_graph(ch)
     # add_graph_numbers()
 

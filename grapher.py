@@ -1,8 +1,8 @@
 from math import *
 
 # Graph size
-SIZE = 20
-xSize = SIZE * 3
+SIZE = 15
+xSize = SIZE
 ySize = SIZE
 graphs = []
 top_y = []
@@ -19,8 +19,8 @@ def get_fx():
     print("Available functions: cos, sin, tan, sqrt, pow")
     print("If you use trigo functions, recommended scaling: off")
     amount = int(input("How many graphs do you want?  "))
-    for g in range(amount):
-        graphs.append(input(f'Input #{g}. f(x) = '))
+    for gr in range(amount):
+        graphs.append(input(f'Input #{gr}. f(x) = '))
         custom_range = input("Custom range? y/n  ")
         if custom_range == 'y':
             top_y.append(int(input("Input top of range = ")))
@@ -70,7 +70,7 @@ def make_x_list():
 ###make_x_list()func
 # Is there nothing before the x? (e.g.   cos(x) -> true   5x -> false)
 # This way, replacing x with * x later on causes no problems, as its 1 * x
-def standAloneX(i):
+def stand_alone_x(i):
     global temp
     if i > 0 and not ("" + temp[i - 1]).isalnum():
         return temp[:i] + "(1x)" + temp[i + 1:]
@@ -92,7 +92,7 @@ def fix_function(fx):
         elif (fx[index].isalpha() or fx[index] == "(") and fx[index - 1].isnumeric():
             fx = insert(fx, index, '*')
             index += 1
-        elif (fx[index].isnumeric() and fx[index-1]==")"):
+        elif (fx[index].isnumeric() and fx[index - 1] == ")"):
             fx = insert(fx, index, '*')
             index += 1
     # 5cos(x) => 5 * cos(1 * x)
@@ -193,9 +193,9 @@ def draw_axis():
             if x == 0:
                 graph += '|'  # Y axis
             elif y == 0:
-                graph += '-'  # X axis
+                graph += '—-—'  # X axis
             else:
-                graph += ' '  # Not axis
+                graph += '   '  # Not axis
         graph += '\n'  # End of line
 
 
@@ -211,7 +211,7 @@ def centaralize(x, y):
 # into an index in the print string
 def Translate(x, y):
     (x, y) = centaralize(x, y)
-    return (xSize * 2 + 2) * y + x
+    return (xSize * 6 + 2) * y + x * 3
 
 
 # Replace at index
@@ -226,31 +226,29 @@ def fill_graph(ch):
     for y in range(top_y[current_graph], bottom_y[current_graph] - 1, -1):  # Top->bottom
         for x in range(left_x[current_graph], right_x[current_graph] + 1):  # Left->Right
             if yvalues[x + xSize] == y:  # If yvalues has current value at current x
-                graph = draw(Translate(x, y), ch)  # Draw the point
+                graph = draw(Translate(x, y), f'{ch}  ')  # Draw the point
 
 
 # Show how big the graph really is
 def add_graph_numbers():
     global graph
-    graph = draw(Translate(-2, 0), '(0,0)')
-    graph = draw(Translate(-len(f'(0,{round(ySize * rel_unit)})') // 2 + 1, ySize), f'(0,{round(ySize * rel_unit)})')
-    graph = draw(Translate(-len(f'(0,{round(ySize * rel_unit)})') // 2 + 1, -ySize), f'(0,{round(-ySize * rel_unit)})')
-    graph = draw(Translate(xSize - len(f'(0,{round(xSize * rel_unit)})') + 1, 0), f'(0,{round(xSize * rel_unit)})')
-    graph = draw(Translate(-xSize, 0), f'(0,{round(-xSize * rel_unit)})')
-
-
+    graph = draw(Translate(-1, 0), ' (0,0) ')
+    graph = draw(Translate(-len(f'({round(ySize * rel_unit)},0)')//4+1, ySize), f'(0,{round(ySize * rel_unit)})')
+    graph = draw(Translate(-len(f'({round(ySize * rel_unit)},0)')//4+1, -ySize), f'(0,{round(-ySize * rel_unit)})')
+    graph = draw(Translate(xSize - len(f'(0, {round(xSize * rel_unit)})')//2+9, 0), f'(0,{round(xSize * rel_unit)})')
+    graph = draw(Translate(-xSize, 0), f'(0, {round(-xSize * rel_unit)})')
 draw_axis()
 
 
 def makefull_function(fx, ch):
-    global yvalues
+    global yvalues, func, need_unit
     fix_function(fx)
     make_temp(fx)
     make_x_list()
     func = fix_function(fx)
     print("Plotting: " + func)
     calc_function(func)
-    if (unit_list[current_graph] == 'y'):
+    if unit_list[current_graph] == 'y':
         linear()
         needUnit()
     fill_graph(ch)

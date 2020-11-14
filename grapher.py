@@ -1,5 +1,4 @@
 from math import *
-
 # Graph size
 SIZE = 20
 xSize = SIZE * 3
@@ -13,6 +12,14 @@ ch_list = []
 unit_list = []
 
 
+def cramp(x, max, min):
+    if x > max:
+        return max
+    elif x < min:
+        return min
+    else:
+        return x
+
 def get_fx():
     print("Editor's note: To do powers, you can do either x * x, xx, pow(x, 2), or x**2")
     print("Available functions: cos, sin, tan, sqrt, pow")
@@ -22,10 +29,10 @@ def get_fx():
         graphs.append(input(f'Input #{gr_n}. f(x) = '))
         custom_range = input("Custom range? y/n  ")
         if custom_range == 'y':
-            top_y.append(int(input("Input top of range = ")))
-            bottom_y.append(int(input("Input bottom of range = ")))
-            left_x.append(int(input("Input left of range = ")))
-            right_x.append(int(input("Input right of range = ")))
+            top_y.append(cramp(int(input("Input top of range = ")), SIZE, -SIZE))
+            bottom_y.append(cramp(int(input("Input top of range = ")), SIZE, -SIZE))
+            left_x.append(cramp(int(input("Input left of range = ")), SIZE, -SIZE))
+            right_x.append(cramp(int(input("Input right of range = ")), SIZE, -SIZE))
         else:
             top_y.append(ySize)
             bottom_y.append(-ySize)
@@ -164,6 +171,8 @@ def linear():
 (max(yvalues[xSize + left_x[g]:right_x[g] + xSize]),
                         min(yvalues[xSize + left_x[g]:right_x[g] + xSize]))
 '''
+
+
 def need_unit_check():
     global need_unit, xSize, yvalues, left_x, right_x, ySize, g, rel_unit
     if need_unit:
@@ -185,6 +194,7 @@ def fix_y_values():
     global yvalues
     global rel_unit
     yvalues = [round(y / rel_unit) for y in yvalues]
+
 
 # fix_y_values()
 graph = ""  # Initiate empty string for graph
@@ -232,7 +242,6 @@ def fill_graph(ch):
         for x in range(left_x[g], right_x[g] + 1):  # Left->Right
             if yvalues[x + xSize] == y:  # If yvalues has current value at current x
                 graph = draw(translate(x, y), ch)  # Draw the point
-
 
 # Show how big the graph really is
 def add_graph_numbers():

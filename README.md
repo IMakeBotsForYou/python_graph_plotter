@@ -54,7 +54,7 @@ Needed to run:
  
 Examples of valid input are (firs image before scaling option was added):
 <img src="https://github.com/IMakeBotsForYou/python_graph_plotter/blob/main/images/graph_example1.png?raw=true" alt="ex1">
-<img src="https://github.com/IMakeBotsForYou/python_graph_plotter/blob/main/images/graph_example2(1).png?raw=true" alt="ex2">
+<img src="https://github.com/IMakeBotsForYou/python_graph_plotter/blob/main/images/fixed_graph_2.png?raw=true" alt="ex2">
 <img src="https://github.com/IMakeBotsForYou/python_graph_plotter/blob/main/images/graph_example3.png?raw=true" alt="ex3">
 
 <!-- ROADMAP -->

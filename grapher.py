@@ -10,7 +10,6 @@ bottom_y = []
 right_x = []
 left_x = []
 ch_list = []
-current_graph = 0
 unit_list = []
 
 
@@ -130,13 +129,13 @@ def calc_function(fx):
     yvalues = []
     for x in xvalues:
         try:
-            yvalues.append(round(eval(fx)))
+            yvalues.append(round(eval(fx.replace("x", str(x)))))
         except:
             yvalues.append(0)
 
 
 # calc_function(func)
-need_unit = False
+need_unit: bool = False
 
 
 # Check if slope is equal at all points
@@ -155,16 +154,21 @@ def linear():
     for index in range(1, xSize, 1):
         if yvalues[index] - yvalues[index - 1] != m:
             need_unit = True
+    print("Scale: " + str(rel_unit) + ":1")
 
 
 # linear()
 # If not, calculate scale.
-def need_unit_check():
-    global need_unit, xSize, yvalues, left_x, right_x, ySize, current_graph, rel_unit
 
+'''
+(max(yvalues[xSize + left_x[g]:right_x[g] + xSize]),
+                        min(yvalues[xSize + left_x[g]:right_x[g] + xSize]))
+'''
+def need_unit_check():
+    global need_unit, xSize, yvalues, left_x, right_x, ySize, g, rel_unit
     if need_unit:
-        (maxY, minY) = (max(yvalues[xSize + left_x[current_graph]:right_x[current_graph] + xSize]),
-                        min(yvalues[xSize + left_x[current_graph]:right_x[current_graph] + xSize]))
+        (maxY, minY) = (max(yvalues),
+                        min(yvalues))
         if maxY > abs(minY):
             rel_unit = maxY / ySize
         else:
@@ -181,7 +185,6 @@ def fix_y_values():
     global yvalues
     global rel_unit
     yvalues = [round(y / rel_unit) for y in yvalues]
-
 
 # fix_y_values()
 graph = ""  # Initiate empty string for graph
@@ -225,8 +228,8 @@ def draw(index, char):
 def fill_graph(ch):
     global graph
     global temp
-    for y in range(top_y[current_graph], bottom_y[current_graph] - 1, -1):  # Top->bottom
-        for x in range(left_x[current_graph], right_x[current_graph] + 1):  # Left->Right
+    for y in range(top_y[g], bottom_y[g] - 1, -1):  # Top->bottom
+        for x in range(left_x[g], right_x[g] + 1):  # Left->Right
             if yvalues[x + xSize] == y:  # If yvalues has current value at current x
                 graph = draw(translate(x, y), ch)  # Draw the point
 
@@ -245,15 +248,15 @@ draw_axis()
 
 
 def make_full_function(fx, ch):
-    global yvalues
+    global yvalues, need_unit
     fix_function(fx)
     make_temp(fx)
     make_x_list()
     func = fix_function(fx)
     print("Plotting: " + func)
     calc_function(func)
-    if unit_list[current_graph] == 'y':
-        linear()
+    linear()
+    if unit_list[g] == 'y':
         need_unit_check()
     fill_graph(ch)
     # add_graph_numbers()

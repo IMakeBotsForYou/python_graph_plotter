@@ -46,6 +46,11 @@ Needed to run:
 <!-- USAGE EXAMPLES -->
 ## Usage
 
+### Options
+ * Amount of graphs (int)
+ * f(x) =  The graph (string)
+ * Custom range: y/N (default n)
+ * Use scaling: Zoom Out/In (y/N)
 Examples of valid input are:
 <img src="https://github.com/IMakeBotsForYou/python_graph_plotter/blob/main/images/graph_example1.png?raw=true" alt="ex1">
 <img src="https://github.com/IMakeBotsForYou/python_graph_plotter/blob/main/images/graph_example2.png?raw=true" alt="ex2">

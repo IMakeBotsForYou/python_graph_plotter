@@ -92,6 +92,9 @@ def fix_function(fx):
         elif (fx[index].isalpha() or fx[index] == "(") and fx[index - 1].isnumeric():
             fx = insert(fx, index, '*')
             index += 1
+        elif (fx[index].isnumeric() and fx[index-1]==")"):
+            fx = insert(fx, index, '*')
+            index += 1
     # 5cos(x) => 5 * cos(1 * x)
     # if (len(xlist) > 0):
     #     if xlist[0] == 0:

@@ -233,10 +233,10 @@ def fill_graph(ch):
 def add_graph_numbers():
     global graph
     graph = draw(Translate(-2, 0), '(0,0)')
-    graph = draw(Translate(-len(f'(0,{round(ySize * rel_unit)})') // 2 + 1, ySize), f'(0,{round(ySize * rel_unit)})')
-    graph = draw(Translate(-len(f'(0,{round(ySize * rel_unit)})') // 2 + 1, -ySize), f'(0,{round(-ySize * rel_unit)})')
-    graph = draw(Translate(xSize - len(f'({round(xSize  * rel_unit)},0)') + 1, 0), f'(0,{round(xSize * rel_unit)})')
-    graph = draw(Translate(-xSize, 0), f'({round(-xSize * rel_unit)},0)')
+    graph = draw(Translate(-len(f'({round(ySize * rel_unit)},0)') // 2 + 1, ySize), f'(0,{round(ySize * rel_unit)})')
+    graph = draw(Translate(-len(f'({round(ySize * rel_unit)},0)') // 2 + 1, -ySize), f'(0,{round(-ySize * rel_unit)})')
+    graph = draw(Translate(xSize - len(f'(0,{round(xSize  * rel_unit)})') + 1, 0), f'(0,{round(xSize * rel_unit)})')
+    graph = draw(Translate(-xSize, 0), f'(0,{round(-xSize * rel_unit)})')
 
 
 draw_axis()

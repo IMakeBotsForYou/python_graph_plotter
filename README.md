@@ -17,6 +17,7 @@
   * [Built With](#built-with)
 * [Getting Started](#getting-started)
 * [Usage](#usage)
+  * [Parser](#parser)
 * [Contributing](#contributing)
 * [Acknowledgements](#acknowledgements)
 
@@ -51,6 +52,10 @@ Needed to run:
  * f(x) =  The graph (string)
  * Custom range: y/N (default n)
  * Use scaling: Zoom Out/In (y/N)
+### Parser
+The parser built in to this plotter can parse things like:
+5cos(5x)9(-4x+1) => 5\*cos(5\*(x))\*9\*(-4\*(x)+1)
+(2x-1)(1-2x)     => (2\*(x)-1)\*(1-2\*(x))
  
 Examples of valid input are (firs image before scaling option was added):
 <img src="https://github.com/IMakeBotsForYou/python_graph_plotter/blob/main/images/graph_example1.png?raw=true" alt="ex1">

@@ -54,7 +54,7 @@ Needed to run:
  * Use scaling: Zoom Out/In (y/N)
 ### Parser
 The parser built in to this plotter can parse things like:
-5cos(5x)9(-4x+1) => 5\*cos(5\*(x))\*9\*(-4\*(x)+1)
+5cos(5x)9(-4x+1) => 5\*cos(5\*(x))\*9\*(-4\*(x)+1)\n
 (2x-1)(1-2x)     => (2\*(x)-1)\*(1-2\*(x))
  
 Examples of valid input are (firs image before scaling option was added):

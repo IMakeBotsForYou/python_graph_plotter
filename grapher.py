@@ -115,6 +115,7 @@ need_unit: bool = False
 
 
 # Check if slope is equal at all points
+
 def linear():
     global xSize, yvalues, need_unit, m
 
@@ -131,19 +132,18 @@ def linear():
         if yvalues[index] - yvalues[index - 1] != m:
             need_unit = True
 
+# Unused
 
-# linear()
 # If not, calculate scale.
 def fix():
-    global need_unit, xSize, yvalues, left_x, right_x, ySize, g, rel_unit
-    if need_unit:
-        (maxY, minY) = (max(yvalues),
-                        min(yvalues))
-        if maxY > abs(minY):
-            rel_unit = maxY / ySize
-        else:
-            rel_unit = abs(minY) / ySize
-        fix_y_values()
+    global xSize, yvalues, ySize, rel_unit
+    (maxY, minY) = (max(yvalues),
+                    min(yvalues))
+    if maxY > abs(minY):
+        rel_unit = maxY / ySize
+    else:
+        rel_unit = abs(minY) / ySize
+    fix_y_values()
 
 
 # needUnit()
@@ -208,7 +208,7 @@ def fill_graph(ch):
                 graph = draw(translate(x, y), ch)  # Draw the point
 
 
-# Show how big the graph really is, and relative marks
+# Simaniot (whats the word in English lol) markers?
 def add_graph_numbers():
     global graph
     # fixes for if the graph is a single, straight horizontal line
@@ -237,6 +237,12 @@ print("Editor's note: To do powers, you can do either x * x, xx, pow(x, 2), or x
 print("Available functions: cos, sin, tan, sqrt, pow")
 print("If you use trigo functions, recommended scaling: off")
 f = input(f'Input f(x) = ')
+c = True
+
+# Loop until valid function is given
+# fix tomorrow.
+
+
 custom_range = input("Custom range? y/n  ")
 if custom_range == 'y':
     top_y = cramp(int(input("Input top of range = ")), SIZE, -SIZE)
@@ -257,7 +263,9 @@ calc_function(func)
 max_x, min_x, max_y, min_y = (max(xvalues), min(xvalues), max(yvalues), min(yvalues))
 draw_axis()
 scale_q = "n"
-# not linear() and not
+
+# think about how to fix this linear shit 2morrow
+
 if not linear() and (max_y > ySize or min_y < -ySize):
     scale_q = 'y'
 if scale_q == 'y':

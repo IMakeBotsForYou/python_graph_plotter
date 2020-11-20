@@ -1,45 +1,35 @@
 from math import *
+
 # Graph size
-SIZE = 20
+from typing import List
+
+SIZE = 23
 xSize = SIZE * 3
 ySize = SIZE
-graphs = []
-top_y = []
-bottom_y = []
-right_x = []
-left_x = []
-ch_list = []
-unit_list = []
+graph = ""
+bottom_y = -SIZE
+top_y = SIZE
+left_x = -xSize
+right_x = xSize
+
+max_x = 0
+min_y = 0
+min_x = 0
+max_y = 0
 
 
-def cramp(x, max, min):
-    if x > max:
+# This function takes a value,
+# and returns a value within the bounds
+# of max and min.
+# If the value is outside the bounds,
+# it pushes it to the bound.
+def cramp(v, max, min):
+    if v > max:
         return max
-    elif x < min:
+    elif v < min:
         return min
     else:
-        return x
-
-def get_fx():
-    print("Editor's note: To do powers, you can do either x * x, xx, pow(x, 2), or x**2")
-    print("Available functions: cos, sin, tan, sqrt, pow")
-    print("If you use trigo functions, recommended scaling: off")
-    amount = int(input("How many graphs do you want?  "))
-    for gr_n in range(amount):
-        graphs.append(input(f'Input #{gr_n}. f(x) = '))
-        custom_range = input("Custom range? y/n  ")
-        if custom_range == 'y':
-            top_y.append(cramp(int(input("Input top of range = ")), SIZE, -SIZE))
-            bottom_y.append(cramp(int(input("Input top of range = ")), SIZE, -SIZE))
-            left_x.append(cramp(int(input("Input left of range = ")), SIZE, -SIZE))
-            right_x.append(cramp(int(input("Input right of range = ")), SIZE, -SIZE))
-        else:
-            top_y.append(ySize)
-            bottom_y.append(-ySize)
-            right_x.append(xSize)
-            left_x.append(-xSize)
-        ch_list.append(input("Char for current graph: "))
-        unit_list.append(input("Use scaling for this: y/n "))
+        return v
 
 
 # Relative Unit
@@ -53,41 +43,35 @@ temp = ""
 func = ""
 
 
+# Removes all spaces in the function
 def make_temp(fx):
     global temp
     temp = fx.replace(" ", "")
 
 
+# Finds all occurrences of x
 def findOccurrences(ch):
     return [i for i, symbol in enumerate(temp) if symbol == ch]
 
 
 # Every time x is mentioned in the function
-# Make a list, so we can fix thigns like 5x -> 5 * x
+# Make a list, so we can fix things like 5x -> 5 * x
 xlist = []
 
 
-###make_temp(func)
+# makes the list of occurrences
 def make_x_list():
     global xlist
     xlist = findOccurrences('x')
 
 
-###make_x_list()func
-# Is there nothing before the x? (e.g.   cos(x) -> true   5x -> false)
-# This way, replacing x with * x later on causes no problems, as its 1 * x
-def standAloneX(i):
-    global temp
-    if i > 0 and not ("" + temp[i - 1]).isalnum():
-        return temp[:i] + "(1x)" + temp[i + 1:]
-    else:
-        return temp
-
-
+# Insert char into str at index i
 def insert(st, i, ch):
     return st[:i] + ch + st[i:]
 
 
+# This parses the function string into
+# a text the eval function can read.
 def fix_function(fx):
     global xlist, temp, func
     # I found a smarter way :D
@@ -101,43 +85,28 @@ def fix_function(fx):
         elif fx[index].isnumeric() and fx[index - 1] == ")":
             fx = insert(fx, index, '*')
             index += 1
-            '''
-    # 5cos(x) => 5 * cos(1 * x)
-    # if (len(xlist) > 0):
-    #     if xlist[0] == 0:
-    #         temp = "1{0}".format(temp)
-    #         xlist.pop(0)
-    # xlist = findOccurrences('x')
-    # while len(xlist) > 0:
-    #     # update list
-    #     i = xlist[-1]
-    #     temp = standAloneX(i)
-    #     del xlist[-1]
-'''
     return fx.replace("x", "(x)")
 
 
 # Initialize axis
 # fix_function(func)
-xvalues = list(range(-xSize, xSize + 1))
-'''
-# xvalues = np.arange(-xSize, xSize+1, 1.0)
-# yvalues = [eval(func.replace("x", str(x))) for x in xvalues]
+xvalues = list(range(left_x, right_x + 1))
 
-###print(f'Plotting: f(x) = {save}')'
-'''
 # Calculate y values, and for x that fall out of arange
 # set value to 0, to not change scale of graph.
 yvalues = []
 
 
+# Eval every x in the range
+# if error, enter 0
 def calc_function(fx):
     global yvalues, xvalues
-    yvalues = []
     for x in xvalues:
         try:
             yvalues.append(round(eval(fx.replace("x", str(x)))))
-        except:
+        except ZeroDivisionError:
+            yvalues.append(0)
+        except ValueError:
             yvalues.append(0)
 
 
@@ -161,19 +130,11 @@ def linear():
     for index in range(1, xSize, 1):
         if yvalues[index] - yvalues[index - 1] != m:
             need_unit = True
-    print("Scale: " + str(rel_unit) + ":1")
 
 
 # linear()
 # If not, calculate scale.
-
-'''
-(max(yvalues[xSize + left_x[g]:right_x[g] + xSize]),
-                        min(yvalues[xSize + left_x[g]:right_x[g] + xSize]))
-'''
-
-
-def need_unit_check():
+def fix():
     global need_unit, xSize, yvalues, left_x, right_x, ySize, g, rel_unit
     if need_unit:
         (maxY, minY) = (max(yvalues),
@@ -183,7 +144,6 @@ def need_unit_check():
         else:
             rel_unit = abs(minY) / ySize
         fix_y_values()
-    print("Scale: " + str(rel_unit) + ":1")
 
 
 # needUnit()
@@ -202,16 +162,19 @@ graph = ""  # Initiate empty string for graph
 
 # Draw x/y axis
 def draw_axis():
-    global graph
+    global graph, xvalues, yvalues
     for y in range(ySize, -ySize - 1, -1):
-        for x in range(-xSize, xSize + 1):
-            if x == 0:
-                graph += '|'  # Y axis
-            elif y == 0:
-                graph += '-'  # X axis
+        for x_val in range(-xSize, xSize + 1):
+            if min_x <= x_val <= max_x and min_y <= y <= max_y:
+                if x_val == 0:
+                    graph += "|"
+                elif y == 0:
+                    graph += "-"
+                else:
+                    graph += " "
             else:
-                graph += ' '  # Not axis
-        graph += '\n'  # End of line
+                graph += " "
+        graph += '\n'  # End of line'
 
 
 # Bring coordinate system to 0, 0 of axis
@@ -230,54 +193,81 @@ def translate(x, y):
 
 
 # Replace at index
-def draw(index, char):
+def draw(index: int, char: str) -> str:
     global graph
     return graph[:index] + char + graph[index + len(char):]
 
 
+# Draw the line itself
 def fill_graph(ch):
     global graph
     global temp
-    for y in range(top_y[g], bottom_y[g] - 1, -1):  # Top->bottom
-        for x in range(left_x[g], right_x[g] + 1):  # Left->Right
+    for y in range(top_y, bottom_y - 1, -1):  # Top->bottom
+        for x in range(left_x, right_x + 1):  # Left->Right
             if yvalues[x + xSize] == y:  # If yvalues has current value at current x
                 graph = draw(translate(x, y), ch)  # Draw the point
 
-# Show how big the graph really is
+
+# Show how big the graph really is, and relative marks
 def add_graph_numbers():
     global graph
-    graph = draw(translate(-2, 0), '(0,0)')
-    graph = draw(translate(-len(f'({round(ySize * rel_unit)},0)') // 2 + 1, ySize), f'(0,{round(ySize * rel_unit)})')
-    graph = draw(translate(-len(f'({round(ySize * rel_unit)},0)') // 2 + 1, -ySize), f'(0,{round(-ySize * rel_unit)})')
-    graph = draw(translate(xSize - len(f'(0,{round(xSize * rel_unit)})') + 1, 0), f'(0,{round(xSize * rel_unit)})')
-    graph = draw(translate(-xSize, 0), f'(0,{round(-xSize * rel_unit)})')
+    # fixes for if the graph is a single, straight horizontal line
+    if int(abs(max_y // rel_unit - min_y // rel_unit) // 10) == 0:
+        fix1 = -2
+        fix2 = 2
+    else:
+        fix1 = 0
+        fix2 = 0
+
+    # y marks
+    for v in range(int(min_y // rel_unit) + fix1, int(max_y // rel_unit - 1) + fix2, 5):
+        if -ySize < v < -2 or ySize > v > 2 :
+            graph = draw(translate(-len(f'({round(v)})') // 2 + 1, v), f'({round(v)})')
+
+    left_numbers = min_x + len(f'{abs(min_x)}') + 6
+    right_numbers = max_x - len(f'{max_x}') - 5
+    amount = 6
+    # x marks
+    for v in range(left_numbers, right_numbers, abs(right_numbers - left_numbers) // amount):
+        if v <= -7 or v >= 7:
+            graph = draw(translate(v - len(f'({round(abs(v))})') // 2 + 1, 0), f'({round(abs(v))})')
 
 
+print("Editor's note: To do powers, you can do either x * x, xx, pow(x, 2), or x**2")
+print("Available functions: cos, sin, tan, sqrt, pow")
+print("If you use trigo functions, recommended scaling: off")
+f = input(f'Input f(x) = ')
+custom_range = input("Custom range? y/n  ")
+if custom_range == 'y':
+    top_y = cramp(int(input("Input top of range = ")), SIZE, -SIZE)
+    bottom_y = cramp(int(input("Input top of range = ")), SIZE, -SIZE)
+    left_x = cramp(int(input("Input left of range = ")), SIZE, -SIZE)
+    right_x = cramp(int(input("Input right of range = ")), SIZE, -SIZE)
+else:
+    top_y = ySize
+    bottom_y = -ySize
+    right_x = xSize
+    left_x = -xSize
+make_temp(f)
+make_x_list()
+func = fix_function(f)
+print("Plotting: " + func)
+calc_function(func)
+
+max_x, min_x, max_y, min_y = (max(xvalues), min(xvalues), max(yvalues), min(yvalues))
 draw_axis()
-
-
-def make_full_function(fx, ch):
-    global yvalues, need_unit
-    fix_function(fx)
-    make_temp(fx)
-    make_x_list()
-    func = fix_function(fx)
-    print("Plotting: " + func)
-    calc_function(func)
-    linear()
-    if unit_list[g] == 'y':
-        need_unit_check()
-    fill_graph(ch)
-    # add_graph_numbers()
-
-
-# Draw graph
-# draw_axis()
-# fill_graph()
-# add_graph_numbers()
-get_fx()
-for g in range(len(graphs)):
-    make_full_function(graphs[g], ch_list[g])
+scale_q = "n"
+# not linear() and not
+if not linear() and (max_y > ySize or min_y < -ySize):
+    scale_q = 'y'
+if scale_q == 'y':
+    fix()
+ch = input("What character to draw the graph with? ")
+while len(ch) > 1:
+    print("Input invalid, must be only 1 char.")
+    ch = input("What character to draw the graph with? ")
+print("Scale: " + str(rel_unit) + ":1")
+fill_graph(ch)
 add_graph_numbers()
 # Draw another functions
 

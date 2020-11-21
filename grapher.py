@@ -225,7 +225,7 @@ def add_graph_numbers():
     for v in range(int(min_y // rel_unit) + fix1, int(max_y // rel_unit - 1) + fix2, 5):
         if -ySize < v < -2 or ySize > v > 2:
             # if the v * rel_unit is too large, we represent it in 10E notation
-            if len(str(v * rel_unit)) > 8:
+            if len(str(round(v * rel_unit))) > 8:
                 s = '%.2E' % (v * rel_unit)
             else:
                 s = str(round(v * rel_unit))
@@ -240,7 +240,7 @@ def add_graph_numbers():
     for v in range(left_numbers, right_numbers, abs(right_numbers - left_numbers) // amount):
         if v <= -7 or v >= 7:
             # if the v * rel_unit is too large, we represent it in 10E notation
-            if len(str(v * rel_unit)) > 8:
+            if len(str(round(v * rel_unit))) > 8:
                 s = '%.2E' % (v * rel_unit)
             else:
                 s = str(round(v * rel_unit))
@@ -268,6 +268,9 @@ while c:
         print("Error parsing")
     except NameError:
         print("Error parsing")
+    except ValueError:
+        print("Has dead-zone")
+        c = False
     if isinstance(a, int):
         c = False
 

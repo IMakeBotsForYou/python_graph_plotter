@@ -236,12 +236,26 @@ def add_graph_numbers():
 print("Editor's note: To do powers, you can do either x * x, xx, pow(x, 2), or x**2")
 print("Available functions: cos, sin, tan, sqrt, pow")
 print("If you use trigo functions, recommended scaling: off")
-f = input(f'Input f(x) = ')
 c = True
-
+a = "dd"
 # Loop until valid function is given
 # fix tomorrow.
-
+while c:
+    try:
+        f = input(f'Input f(x) = ')
+        make_temp(f)
+        make_x_list()
+        func = fix_function(f)
+        a = round(eval(func.replace("x", '(1)')))
+    except ZeroDivisionError:
+        print("Asymptote")
+        c = False
+    except SyntaxError:
+        print("Error parsing")
+    except NameError:
+        print("Error parsing")
+    if isinstance(a, int):
+        c = False
 
 custom_range = input("Custom range? y/n  ")
 if custom_range == 'y':
@@ -257,6 +271,7 @@ else:
 make_temp(f)
 make_x_list()
 func = fix_function(f)
+
 print("Plotting: " + func)
 calc_function(func)
 
@@ -283,3 +298,5 @@ print(graph)
 # Editor's notes;
 print("Footnote: Any values that fall out of range are represented with a 0.")
 print("Of course, a x = 0 value doesn't always mean an error.")
+print("Also, the markers on the graph represent the x/y values without scaling")
+print("since with scaling, they would be too large to fit sometimes.")

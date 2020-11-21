@@ -132,6 +132,7 @@ def linear():
         if yvalues[index] - yvalues[index - 1] != m:
             need_unit = True
 
+
 # Unused
 
 # If not, calculate scale.
@@ -220,17 +221,30 @@ def add_graph_numbers():
         fix2 = 0
 
     # y marks
-    for v in range(int(min_y // rel_unit) + fix1, int(max_y // rel_unit - 1) + fix2, 5):
-        if -ySize < v < -2 or ySize > v > 2 :
-            graph = draw(translate(-len(f'({round(v)})') // 2 + 1, v), f'({round(v)})')
 
+    for v in range(int(min_y // rel_unit) + fix1, int(max_y // rel_unit - 1) + fix2, 5):
+        if -ySize < v < -2 or ySize > v > 2:
+            # if the v * rel_unit is too large, we represent it in 10E notation
+            if len(str(v * rel_unit)) > 8:
+                s = '%.2E' % (v * rel_unit)
+            else:
+                s = str(round(v * rel_unit))
+            graph = draw(translate(-len(s) // 2 + 1, v), s)
+
+    # Declaration to make code a bit more readable :D
     left_numbers = min_x + len(f'{abs(min_x)}') + 6
     right_numbers = max_x - len(f'{max_x}') - 5
     amount = 6
+
     # x marks
     for v in range(left_numbers, right_numbers, abs(right_numbers - left_numbers) // amount):
         if v <= -7 or v >= 7:
-            graph = draw(translate(v - len(f'({round(abs(v))})') // 2 + 1, 0), f'({round(abs(v))})')
+            # if the v * rel_unit is too large, we represent it in 10E notation
+            if len(str(v * rel_unit)) > 8:
+                s = '%.2E' % (v * rel_unit)
+            else:
+                s = str(round(v * rel_unit))
+            graph = draw(translate(v - len(s) // 2 + 1, 0), s)
 
 
 print("Editor's note: To do powers, you can do either x * x, xx, pow(x, 2), or x**2")
@@ -298,5 +312,3 @@ print(graph)
 # Editor's notes;
 print("Footnote: Any values that fall out of range are represented with a 0.")
 print("Of course, a x = 0 value doesn't always mean an error.")
-print("Also, the markers on the graph represent the x/y values without scaling")
-print("since with scaling, they would be too large to fit sometimes.")
